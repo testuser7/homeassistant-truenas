@@ -75,19 +75,16 @@ def new_commits(repo, sha):
     release_commit = repo.get_commit(sha)
     since = datetime.strptime(release_commit.last_modified, dateformat)
     commits = list(repo.get_commits(since=since))
-    if len(commits) <= 1:
-        return False
-    return reversed(commits[:-1])
+    return False if len(commits) <= 1 else reversed(commits[:-1])
 
 
 def last_integration_release(github, skip=True):
     """Return last release."""
     repo = github.get_repo(REPO_NAME)
     tag_sha = None
-    data = {}
-    tags = list(repo.get_tags())
-    reg = r"^v?\d+(\.\d+){0,2}$"
-    if tags:
+    tag_name = None
+    if tags := list(repo.get_tags()):
+        reg = r"^v?\d+(\.\d+){0,2}$"
         for tag in tags:
             tag_name = tag.name
             if re.match(reg, tag_name):
@@ -96,9 +93,7 @@ def last_integration_release(github, skip=True):
                     skip = False
                     continue
                 break
-    data["tag_name"] = tag_name
-    data["tag_sha"] = tag_sha
-    return data
+    return {"tag_name": tag_name, "tag_sha": tag_sha}
 
 
 def get_integration_commits(github, skip=True):

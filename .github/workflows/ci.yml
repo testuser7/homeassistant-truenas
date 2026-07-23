@@ -82,7 +82,7 @@ jobs:
           pip install -r requirements_tests.txt
           pip install mypy
       - name: Run mypy (strict, per pyproject.toml)
-        run: mypy
+        run: python -m mypy
 
   security:
     name: Security check - Bandit
