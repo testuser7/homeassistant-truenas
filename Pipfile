@@ -15,4 +15,4 @@ pytest-cov = ">=6.0"
 
 
 [packages]
-aiotruenas = ">=1.0.0"
+aiotruenas = {git = "https://github.com/testuser7/aiotruenas.git", ref = "apps"}

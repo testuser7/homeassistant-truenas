@@ -30,7 +30,7 @@ def _flatten(data: dict, prefix: str = "") -> dict[str, object]:
     for key, value in data.items():
         full = f"{prefix}.{key}" if prefix else key
         if isinstance(value, dict):
-            items.update(_flatten(value, full))
+            items |= _flatten(value, full)
         else:
             items[full] = value
     return items
@@ -67,8 +67,7 @@ def main() -> None:
         if path.name == REFERENCE:
             continue
         locale = _flatten(json.loads(path.read_text(encoding="utf-8")))
-        errors = _validate(locale, reference)
-        if errors:
+        if errors := _validate(locale, reference):
             failed = True
             print(f"FAIL {path.name}")
             for error in errors:
